@@ -24,6 +24,8 @@ typedef struct
     DEVICE device;
 }StateType;
 
+void clearKeys();
+
 uint8_t paintCommand();
 
 uint8_t notePad();
@@ -33,6 +35,10 @@ uint8_t windowSide(SIDE side);
 uint8_t writeHelloWorld();
 
 uint8_t copy();
+
+uint8_t paste();
+
+uint8_t enter();
 
 uint8_t drawRectangle();
 
