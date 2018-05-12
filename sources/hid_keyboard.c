@@ -72,36 +72,7 @@ usb_device_hid_keyboard_struct_t s_UsbDeviceHidKeyboard;
 static usb_status_t USB_DeviceHidKeyboardAction(void)
 {
     functionHandler(KEYBOARD);
-//    static int x = 0U;
-//    enum
-//    {
-//        DOWN,
-//        UP
-//    };
-//    static uint8_t dir = DOWN;
-//
-//    s_UsbDeviceHidKeyboard.buffer[2] = 0x00U;
-//    switch (dir)
-//    {
-//        case DOWN:
-//            x++;
-//            if (x > 200U)
-//            {
-//                dir++;
-//                s_UsbDeviceHidKeyboard.buffer[2] = KEY_PAGEUP;
-//            }
-//            break;
-//        case UP:
-//            x--;
-//            if (x < 1U)
-//            {
-//                dir = DOWN;
-//                s_UsbDeviceHidKeyboard.buffer[2] = KEY_PAGEDOWN;
-//            }
-//            break;
-//        default:
-//            break;
-//    }
+
     return USB_DeviceHidSend(s_UsbDeviceComposite->hidKeyboardHandle, USB_HID_KEYBOARD_ENDPOINT_IN,
                              s_UsbDeviceHidKeyboard.buffer, USB_HID_KEYBOARD_REPORT_LENGTH);
 }
