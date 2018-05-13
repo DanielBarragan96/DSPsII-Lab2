@@ -42,6 +42,12 @@ uint8_t enter();
 
 uint8_t drawRectangle();
 
+uint8_t openPaint();
+
+uint8_t openNotepad();
+
+uint8_t select();
+
 uint8_t functionHandler(DEVICE device);
 
 #endif /* FUNCTIONS_H_ */

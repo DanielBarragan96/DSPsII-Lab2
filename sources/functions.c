@@ -17,9 +17,30 @@ extern usb_device_hid_keyboard_struct_t s_UsbDeviceHidKeyboard;
 
 const StateType FSM_Moore[FSM_SIZE] =
 {
-    {&copy,KEYBOARD},
-    {&enter,KEYBOARD},
-    {&paste,KEYBOARD}
+	{&openPaint,KEYBOARD},
+	{&enter,KEYBOARD},
+
+	{&drawRectangle,MOUSE},
+
+	{&openNotepad,KEYBOARD},
+	{&enter,KEYBOARD},
+
+	{&windowSide(LEFT),KEYBOARD},
+
+	{&openNotepad,KEYBOARD},
+	{&enter,KEYBOARD},
+
+	{&windowSide(RIGHT),KEYBOARD},
+
+	/*falta mover mouse a la izquierda y hacer click*/
+	{&writeHelloWorld,KEYBOARD},
+	{&select,KEYBOARD},
+	{&copy,KEYBOARD},
+
+	/*falta mover mouse a la derecha y hacer click*/
+	{&paste,KEYBOARD},
+
+
 };
 
 volatile uint8_t position = 0;
@@ -28,6 +49,10 @@ void clearKeys()
 {
     s_UsbDeviceHidKeyboard.buffer[2] = 0;
     s_UsbDeviceHidKeyboard.buffer[3] = 0;
+    s_UsbDeviceHidKeyboard.buffer[4] = 0;
+	s_UsbDeviceHidKeyboard.buffer[5] = 0;
+	s_UsbDeviceHidKeyboard.buffer[6] = 0;
+	s_UsbDeviceHidKeyboard.buffer[7] = 0;
 }
 
 void clearMouse()
@@ -74,6 +99,37 @@ uint8_t openPaint()
 	   return 0;
 }
 
+uint8_t openNotepad()
+{
+	 static uint8_t count = 0;
+	    if(count==0)
+	        clearKeys();
+	    else if(count == 1)
+	        s_UsbDeviceHidKeyboard.buffer[2] = KEY_LEFT_GUI;
+	    else if(2==count)
+	        s_UsbDeviceHidKeyboard.buffer[3] = KEY_R;
+	    else if(4==count){
+	    	s_UsbDeviceHidKeyboard.buffer[2] = KEY_N;
+	        clearKeys();
+	    }
+	    else if(5==count){
+	    	s_UsbDeviceHidKeyboard.buffer[3] = KEY_O;
+	    	s_UsbDeviceHidKeyboard.buffer[4] = KEY_T;
+	    	s_UsbDeviceHidKeyboard.buffer[5] = KEY_E;
+	    	s_UsbDeviceHidKeyboard.buffer[6] = KEY_P;
+	    	s_UsbDeviceHidKeyboard.buffer[7] = KEY_A;
+	    	s_UsbDeviceHidKeyboard.buffer[2] = KEY_D;
+	    }
+	    else if(6==count)
+	    {
+	        clearKeys();
+	        count = 0;
+	        return 1;
+	    }
+	    count++;
+	   return 0;
+}
+
 uint8_t notePad()
 {
     static uint8_t status = 0;
@@ -104,11 +160,13 @@ uint8_t windowSide(SIDE side)
     switch(side)
     {
         case RIGHT:{
-
+        	 s_UsbDeviceHidKeyboard.buffer[2] = KEY_LEFT_GUI;
+        	 s_UsbDeviceHidKeyboard.buffer[2] = KEY_RIGHTARROW;
             break;
         }
         case LEFT:{
-
+        	 s_UsbDeviceHidKeyboard.buffer[2] = KEY_LEFT_GUI;
+        	 s_UsbDeviceHidKeyboard.buffer[2] = KEY_LEFTARROW;
             break;
         }
         case UP:
@@ -121,7 +179,57 @@ uint8_t windowSide(SIDE side)
 
 uint8_t writeHelloWorld()
 {
+	 static uint8_t count = 0;
+	    if(count==0)
+	        clearKeys();
+	    else if(count == 1){
+	    	s_UsbDeviceHidKeyboard.buffer[3] = KEY_H;
+			s_UsbDeviceHidKeyboard.buffer[4] = KEY_E;
+			s_UsbDeviceHidKeyboard.buffer[5] = KEY_L;
+			s_UsbDeviceHidKeyboard.buffer[6] = KEY_L;
+			s_UsbDeviceHidKeyboard.buffer[7] = KEY_O;
+	    }
+	    else if(2==count)
+	        s_UsbDeviceHidKeyboard.buffer[2] = KEY_SPACEBAR;
+	    else if(3==count){
+	    	s_UsbDeviceHidKeyboard.buffer[3] = KEY_W;
+			s_UsbDeviceHidKeyboard.buffer[4] = KEY_O;
+			s_UsbDeviceHidKeyboard.buffer[5] = KEY_R;
+			s_UsbDeviceHidKeyboard.buffer[6] = KEY_L;
+			s_UsbDeviceHidKeyboard.buffer[7] = KEY_D;
+	    }
+	    else if(4==count)
+	        clearKeys();
+	    else if(5==count)
+	    {
+	        clearKeys();
+	        count = 0;
+	        return 1;
+	    }
+	    count++;
+	    return 0;
 
+    return 0;
+}
+
+uint8_t select()
+{
+    static uint8_t count = 0;
+    if(count==0)
+        clearKeys();
+    else if(count == 1)
+        s_UsbDeviceHidKeyboard.buffer[2] = KEY_LEFTCONTROL;
+    else if(2==count)
+        s_UsbDeviceHidKeyboard.buffer[3] = KEY_E;
+    else if(3==count)
+        clearKeys();
+    else if(4==count)
+    {
+        clearKeys();
+        count = 0;
+        return 1;
+    }
+    count++;
     return 0;
 }
 
