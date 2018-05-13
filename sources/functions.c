@@ -43,6 +43,37 @@ uint8_t paintCommand()
     return 1;
 }
 
+uint8_t openPaint()
+{
+	 static uint8_t count = 0;
+	    if(count==0)
+	        clearKeys();
+	    else if(count == 1)
+	        s_UsbDeviceHidKeyboard.buffer[2] = KEY_LEFT_GUI;
+	    else if(2==count)
+	        s_UsbDeviceHidKeyboard.buffer[3] = KEY_R;
+	    else if(4==count){
+	    	s_UsbDeviceHidKeyboard.buffer[2] = KEY_M;
+	        clearKeys();
+	    }
+	    else if(5==count){
+	    	s_UsbDeviceHidKeyboard.buffer[3] = KEY_S;
+	    	s_UsbDeviceHidKeyboard.buffer[4] = KEY_P;
+	    	s_UsbDeviceHidKeyboard.buffer[5] = KEY_A;
+	    	s_UsbDeviceHidKeyboard.buffer[6] = KEY_I;
+	    	s_UsbDeviceHidKeyboard.buffer[7] = KEY_N;
+	    	s_UsbDeviceHidKeyboard.buffer[2] = KEY_T;
+	    }
+	    else if(6==count)
+	    {
+	        clearKeys();
+	        count = 0;
+	        return 1;
+	    }
+	    count++;
+	   return 0;
+}
+
 uint8_t notePad()
 {
     static uint8_t status = 0;
