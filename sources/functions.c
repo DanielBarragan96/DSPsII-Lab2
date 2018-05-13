@@ -79,7 +79,6 @@ uint8_t openPaint()
 	        s_UsbDeviceHidKeyboard.buffer[3] = KEY_R;
 	    else if(4==count){
 	    	s_UsbDeviceHidKeyboard.buffer[2] = KEY_M;
-	        clearKeys();
 	    }
 	    else if(5==count){
 	    	s_UsbDeviceHidKeyboard.buffer[3] = KEY_S;
@@ -110,7 +109,6 @@ uint8_t openNotepad()
 	        s_UsbDeviceHidKeyboard.buffer[3] = KEY_R;
 	    else if(4==count){
 	    	s_UsbDeviceHidKeyboard.buffer[2] = KEY_N;
-	        clearKeys();
 	    }
 	    else if(5==count){
 	    	s_UsbDeviceHidKeyboard.buffer[3] = KEY_O;
