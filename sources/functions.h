@@ -30,9 +30,11 @@ uint8_t paintCommand();
 
 uint8_t notePad();
 
-uint8_t windowSide(SIDE side);
+uint8_t windowSideLeft();
 
 uint8_t writeHelloWorld();
+
+uint8_t windowSideRight();
 
 uint8_t copy();
 
@@ -47,6 +49,8 @@ uint8_t openPaint();
 uint8_t openNotepad();
 
 uint8_t select();
+
+uint8_t movePosition();
 
 uint8_t functionHandler(DEVICE device);
 

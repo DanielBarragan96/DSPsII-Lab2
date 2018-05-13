@@ -13,7 +13,8 @@
 extern usb_device_hid_mouse_struct_t s_UsbDeviceHidMouse;
 extern usb_device_hid_keyboard_struct_t s_UsbDeviceHidKeyboard;
 
-#define FSM_SIZE 3
+#define FSM_SIZE 15
+static uint8_t count = 0;
 
 const StateType FSM_Moore[FSM_SIZE] =
 {
@@ -25,19 +26,19 @@ const StateType FSM_Moore[FSM_SIZE] =
 	{&openNotepad,KEYBOARD},
 	{&enter,KEYBOARD},
 
-	{&windowSide(LEFT),KEYBOARD},
+	{&windowSideLeft,KEYBOARD},
 
 	{&openNotepad,KEYBOARD},
 	{&enter,KEYBOARD},
 
-	{&windowSide(RIGHT),KEYBOARD},
+	{&windowSideRight,KEYBOARD},
 
-	/*falta mover mouse a la izquierda y hacer click*/
+	{&movePosition,KEYBOARD},
 	{&writeHelloWorld,KEYBOARD},
 	{&select,KEYBOARD},
 	{&copy,KEYBOARD},
 
-	/*falta mover mouse a la derecha y hacer click*/
+	{&movePosition,KEYBOARD},
 	{&paste,KEYBOARD},
 
 
@@ -70,7 +71,6 @@ uint8_t paintCommand()
 
 uint8_t openPaint()
 {
-	 static uint8_t count = 0;
 	    if(count==0)
 	        clearKeys();
 	    else if(count == 1)
@@ -100,7 +100,6 @@ uint8_t openPaint()
 
 uint8_t openNotepad()
 {
-	 static uint8_t count = 0;
 	    if(count==0)
 	        clearKeys();
 	    else if(count == 1)
@@ -153,26 +152,40 @@ uint8_t notePad()
     return 0;
 }
 
-uint8_t windowSide(SIDE side)
+uint8_t windowSideRight()
 {
-    switch(side)
-    {
-        case RIGHT:{
-        	 s_UsbDeviceHidKeyboard.buffer[2] = KEY_LEFT_GUI;
-        	 s_UsbDeviceHidKeyboard.buffer[2] = KEY_RIGHTARROW;
-            break;
-        }
-        case LEFT:{
-        	 s_UsbDeviceHidKeyboard.buffer[2] = KEY_LEFT_GUI;
-        	 s_UsbDeviceHidKeyboard.buffer[2] = KEY_LEFTARROW;
-            break;
-        }
-        case UP:
-        case DOWN:
-        default:
-            break;
-    }
-    return 1;
+	    if(count==0)
+	        clearKeys();
+	    else if(count == 1)
+	    	s_UsbDeviceHidKeyboard.buffer[2] = KEY_LEFT_GUI;
+	    else if(2==count)
+	    	  s_UsbDeviceHidKeyboard.buffer[2] = KEY_RIGHTARROW;
+	    else if(4==count)
+	    {
+	        clearKeys();
+	        count = 0;
+	        return 1;
+	    }
+	    count++;
+	    return 0;
+}
+
+uint8_t windowSideLeft()
+{
+	  if(count==0)
+		        clearKeys();
+		    else if(count == 1)
+		    	s_UsbDeviceHidKeyboard.buffer[2] = KEY_LEFT_GUI;
+		    else if(2==count)
+		    	s_UsbDeviceHidKeyboard.buffer[2] = KEY_LEFTARROW;
+		    else if(4==count)
+		    {
+		        clearKeys();
+		        count = 0;
+		        return 1;
+		    }
+		    count++;
+		    return 0;
 }
 
 uint8_t writeHelloWorld()
@@ -293,6 +306,29 @@ uint8_t enter()
     x++;
     return 0;
 }
+
+uint8_t movePosition()
+{
+    static uint8_t x = 0;
+    if(0==x)
+    {
+        clearKeys();
+    }
+    else if(1==x)
+    {
+    	s_UsbDeviceHidKeyboard.buffer[2] = KEY_LEFTALT;
+        s_UsbDeviceHidKeyboard.buffer[3] = KEY_TAB;
+    }
+    else
+    {
+        clearKeys();
+        x = 0;
+        return 1;
+    }
+    x++;
+    return 0;
+}
+
 
 uint8_t drawRectangle()
 {
