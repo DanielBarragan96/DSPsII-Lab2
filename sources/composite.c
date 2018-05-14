@@ -359,6 +359,8 @@ void APP_task(void *handle)
 {
     USB_DeviceApplicationInit();
 
+    initFunctions();
+
 #if USB_DEVICE_CONFIG_USE_TASK
     if (g_UsbDeviceComposite.deviceHandle)
     {
