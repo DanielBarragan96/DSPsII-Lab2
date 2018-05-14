@@ -24,11 +24,11 @@ typedef struct
     DEVICE device;
 }StateType;
 
+void initFunctions();
+
 void clearKeys();
 
 uint8_t paintCommand();
-
-uint8_t notePad();
 
 uint8_t windowSideLeft();
 
@@ -51,6 +51,8 @@ uint8_t openNotepad();
 uint8_t select();
 
 uint8_t movePosition();
+
+void delayFunction();
 
 uint8_t functionHandler(DEVICE device);
 
